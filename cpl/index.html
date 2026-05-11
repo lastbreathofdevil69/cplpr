@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPL Lab - 24 Problems</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Prism.js Syntax Highlighting CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            --bg-color: #f4f6f8;
+            --sidebar-bg: #ffffff;
+            --header-bg: #ffffff;
+            --text-color: #333333;
+            --heading-color: #1a1a1a;
+            --accent-color: #4f46e5;
+            --accent-hover: #4338ca;
+            --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --code-bg: #1e1e1e;
+            --desc-bg: #eff6ff;
+            --desc-text: #1e3a8a;
+            --desc-border: #bfdbfe;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition-speed: 0.3s;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --sidebar-bg: #1e293b;
+            --header-bg: #1e293b;
+            --text-color: #cbd5e1;
+            --heading-color: #f8fafc;
+            --accent-color: #818cf8;
+            --accent-hover: #a5b4fc;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --code-bg: #0f172a;
+            --desc-bg: #0f172a;
+            --desc-text: #93c5fd;
+            --desc-border: #3b82f6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            overflow: hidden;
+        }
+
+        /* Top Header Area */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            height: 64px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 20;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            transition: background-color var(--transition-speed), border-color var(--transition-speed);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            margin: 0;
+        }
+
+        /* Dark Mode Toggle Switch */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 28px;
+            position: relative;
+            width: 50px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 20px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 20px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .theme-icon {
+            font-size: 1.1rem;
+        }
+
+        /* App Layout */
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 20px;
+            transition: background-color var(--transition-speed), border-color var(--transition-speed);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: block;
+            padding: 10px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-speed);
+        }
+
+        .problem-title {
+            font-size: 1.5rem;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .problem-desc {
+            background-color: var(--desc-bg);
+            border-left: 4px solid var(--desc-border);
+            padding: 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--desc-text);
+            white-space: pre-wrap;
+            transition: all var(--transition-speed);
+        }
+
+        /* Code Block Container */
+        .code-wrapper {
+            position: relative;
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .copy-btn.copied {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: #ffffff;
+        }
+
+        pre[class*="language-"] {
+            margin: 0 !important;
+            padding: 24px !important;
+            background: transparent !important;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: 30vh;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .main-content {
+                height: 70vh;
+                padding: 20px;
+            }
+            .problem-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Area -->
+    <header class="header">
+        <h1>CPL Lab Practicals</h1>
+        <div class="theme-switch-wrapper">
+            <span class="theme-icon">☀️</span>
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+            <span class="theme-icon">🌙</span>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#prob-1">1. The 3N + 1 Problem</a></li>
+                <li><a href="#prob-2">2. Minesweeper</a></li>
+                <li><a href="#prob-3">3. The Trip</a></li>
+                <li><a href="#prob-4">4. Sales By Match</a></li>
+                <li><a href="#prob-5">5. Contest Scoreboard</a></li>
+                <li><a href="#prob-6">6. Crypt Kicker (Encryption)</a></li>
+                <li><a href="#prob-7">7. Queues: A Tale of Two Stacks</a></li>
+                <li><a href="#prob-8">8. Castle on the Grid</a></li>
+                <li><a href="#prob-9">9. Automated Judge Script</a></li>
+                <li><a href="#prob-10">10. Wertyu</a></li>
+                <li><a href="#prob-11">11. Special String Again</a></li>
+                <li><a href="#prob-12">12. Pangrams</a></li>
+                <li><a href="#prob-13">13. Shoemaker's Problem</a></li>
+                <li><a href="#prob-14">14. Longest Nap</a></li>
+                <li><a href="#prob-15">15. Fraudulent Activity Notifications</a></li>
+                <li><a href="#prob-16">16. Find the Median</a></li>
+                <li><a href="#prob-17">17. A Multiplication Game</a></li>
+                <li><a href="#prob-18">18. Reverse and Add</a></li>
+                <li><a href="#prob-19">19. Maximum Draws</a></li>
+                <li><a href="#prob-20">20. Combo Meal</a></li>
+                <li><a href="#prob-21">21. Steps</a></li>
+                <li><a href="#prob-22">22. The Priest Mathematician</a></li>
+                <li><a href="#prob-23">23. Manasa and Combinatorics</a></li>
+                <li><a href="#prob-24">24. Building a List</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="main-scroll">
+            <div class="container">
+
+                <!-- Problem 1 -->
+                <section id="prob-1" class="problem-card">
+                    <h2 class="problem-title">1. The 3N + 1 Problem</h2>
+                    <div class="problem-desc">Problem: Given i and j, find max cycle length for any n in [i,j].
+Cycle: n -> n/2 (if even) or n -> 3n+1 (if odd), until n=1.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-1')">Copy</button>
+                        <pre><code class="language-python" id="code-1">def cycle_length(n):
+    count = 1
+    while n != 1:
+        if n % 2 == 0:
+            n = n // 2
+        else:
+            n = 3 * n + 1
+        count += 1
+    return count
+
+i = int(input("Enter starting number (i): "))
+j = int(input("Enter ending number (j): "))
+
+lo = min(i, j)
+hi = max(i, j)
+max_cycle = 0
+
+for n in range(lo, hi + 1):
+    current_cycle = cycle_length(n)
+    if current_cycle > max_cycle:
+        max_cycle = current_cycle
+
+print(f"Result: {i} {j} {max_cycle}")</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 2 -->
+                <section id="prob-2" class="problem-card">
+                    <h2 class="problem-title">2. Minesweeper</h2>
+                    <div class="problem-desc">Problem: Given a grid with mines (*) and safe squares (.), output each safe square as count of adjacent mines.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-2')">Copy</button>
+                        <pre><code class="language-python" id="code-2">r = int(input("Enter number of rows: "))
+c = int(input("Enter number of columns: "))
+grid =[]
+
+print("Enter the grid rows (use * for mine, . for safe):")
+for _ in range(r):
+    grid.append(list(input()))
+
+print("\nOutput Field:")
+for i in range(r):
+    for j in range(c):
+        if grid[i][j] == '*':
+            print('*', end='')
+        else:
+            count = 0
+            # Check all 8 directions
+            for di in[-1, 0, 1]:
+                for dj in [-1, 0, 1]:
+                    ni = i + di
+                    nj = j + dj
+                    if 0 <= ni < r and 0 <= nj < c and grid[ni][nj] == '*':
+                        count += 1
+            print(count, end='')
+    print() # Next line for the row</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 3 -->
+                <section id="prob-3" class="problem-card">
+                    <h2 class="problem-title">3. The Trip</h2>
+                    <div class="problem-desc">Problem: Find minimum amount that must be transferred among 3 persons so their expenses become equal.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-3')">Copy</button>
+                        <pre><code class="language-python" id="code-3">spent =[]
+print("Enter amounts spent by 3 persons:")
+for i in range(3):
+    spent.append(int(input(f"Person {i+1}: ")))
+
+total = sum(spent)
+avg = total / 3
+transfer = 0
+
+for i in range(3):
+    if spent[i] < avg:
+        transfer = transfer + (avg - spent[i])
+
+print("Minimum amount to be transferred =", int(transfer), "rupees")</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 4 -->
+                <section id="prob-4" class="problem-card">
+                    <h2 class="problem-title">4. Sales By Match</h2>
+                    <div class="problem-desc">Problem: Given n socks with colors, find number of matching pairs.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-4')">Copy</button>
+                        <pre><code class="language-python" id="code-4">def sockMerchant(socks): 
+    count = {}  
+    pairs = 0 
+    for sock in socks: 
+        if sock in count: 
+            count[sock] += 1 
+        else: 
+            count[sock] = 1 
+    for color in count: 
+        pairs += count[color] // 2 
+    return pairs 
+
+# Input 
+n = int(input("Enter number of socks: ")) 
+socks = list(map(int, input("Enter sock colors separated by spaces: ").split())) 
+# Function call 
+result = sockMerchant(socks) 
+print("Total matching pairs of socks:", result)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 5 -->
+                <section id="prob-5" class="problem-card">
+                    <h2 class="problem-title">5. Contest Scoreboard</h2>
+                    <div class="problem-desc">Problem: Parse submissions (team, problem, time, result). Output ranked scoreboard (More solved -> Less penalty -> Team Number).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-5')">Copy</button>
+                        <pre><code class="language-python" id="code-5">n = int(input("Enter number of submissions: "))
+teams = {}
+
+print("Enter submissions (team prob time result(C/I)):")
+for _ in range(n):
+    data = input().split()
+    team, prob, time, result = int(data[0]), int(data[1]), int(data[2]), data[3]
+    
+    if team not in teams:
+        teams[team] = {}
+    if prob not in teams[team]:
+        teams[team][prob] = [0, 0] #[time_solved, wrong_attempts]
+    
+    if result == 'C' and teams[team][prob][0] == 0:
+        teams[team][prob][0] = time
+    elif result == 'I' and teams[team][prob][0] == 0:
+        teams[team][prob][1] += 1
+
+scoreboard =[]
+for team, probs in teams.items():
+    solved = 0
+    penalty = 0
+    for p, stats in probs.items():
+        if stats[0] > 0: # If solved
+            solved += 1
+            penalty += stats[0] + (stats[1] * 20)
+    scoreboard.append([team, solved, penalty])
+
+# Sort: Solved (Descending), Penalty (Ascending), Team (Ascending)
+scoreboard.sort(key=lambda x: (-x[1], x[2], x[0]))
+
+print("\nFinal Scoreboard (Team Solved Penalty):")
+for t, s, p in scoreboard:
+    print(t, s, p)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 6 -->
+                <section id="prob-6" class="problem-card">
+                    <h2 class="problem-title">6. Crypt Kicker (Encryption)</h2>
+                    <div class="problem-desc">Problem: Print the string in a space-separated grid format to encrypt it based on ceiling of the square root (No math library).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-6')">Copy</button>
+                        <pre><code class="language-python" id="code-6">def encryption(s):
+    # Remove spaces
+    s = s.replace(" ", "")
+    l = len(s)
+    
+    # Custom Logic to find Ceil of Square Root
+    c = int(l ** 0.5)
+    if c * c < l:
+        c += 1
+        
+    result =[]
+    # Read characters column-wise
+    for i in range(c):
+        text = ""
+        for j in range(i, l, c):
+            text += s[j]
+        result.append(text)
+        
+    return " ".join(result)
+
+# Input
+s = input("Enter string: ")
+# Output
+print("Encrypted:", encryption(s))</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 7 -->
+                <section id="prob-7" class="problem-card">
+                    <h2 class="problem-title">7. Queues: A Tale of Two Stacks</h2>
+                    <div class="problem-desc">Problem: Implement a Queue using two Stacks. Operations: 1=enqueue, 2=dequeue, 3=peek (print front).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-7')">Copy</button>
+                        <pre><code class="language-python" id="code-7">stack1 = []
+stack2 =[]
+q = int(input("Enter number of queries: "))
+
+print("Enter queries (1 x to enqueue, 2 to dequeue, 3 to print):")
+for _ in range(q):
+    query = list(map(int, input().split()))
+    
+    # Enqueue operation
+    if query[0] == 1:
+        stack1.append(query[1])
+        
+    # Dequeue operation
+    elif query[0] == 2:
+        if not stack2:
+            while stack1:
+                stack2.append(stack1.pop())
+        if stack2:
+            stack2.pop()
+            
+    # Print front element
+    elif query[0] == 3:
+        if not stack2:
+            while stack1:
+                stack2.append(stack1.pop())
+        if stack2:
+            print(stack2[-1])</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 8 -->
+                <section id="prob-8" class="problem-card">
+                    <h2 class="problem-title">8. Castle on the Grid</h2>
+                    <div class="problem-desc">Problem: Find min moves (one move = full sweep in one direction) from Start to Goal. Uses simple List Queue.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-8')">Copy</button>
+                        <pre><code class="language-python" id="code-8">n = int(input("Enter grid size (N): "))
+grid =[]
+print("Enter the grid row by row (use . for safe, X for block):")
+for _ in range(n):
+    grid.append(input())
+    
+sx, sy, gx, gy = map(int, input("Enter Start X, Start Y, Goal X, Goal Y: ").split())
+
+visited = [[False] * n for _ in range(n)]
+queue = [[sx, sy, 0]]
+visited[sx][sy] = True
+
+found = False
+while len(queue) > 0:
+    x, y, moves = queue.pop(0) # Standard list pop from front
+    
+    if x == gx and y == gy:
+        print("Minimum moves:", moves)
+        found = True
+        break
+        
+    for dx, dy in [[0, 1], [0, -1],[1, 0], [-1, 0]]:
+        nx, ny = x + dx, y + dy
+        while 0 <= nx < n and 0 <= ny < n and grid[nx][ny] != 'X':
+            if not visited[nx][ny]:
+                visited[nx][ny] = True
+                queue.append([nx, ny, moves + 1])
+            nx += dx
+            ny += dy
+
+if not found:
+    print("Cannot reach the goal.")</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 9 -->
+                <section id="prob-9" class="problem-card">
+                    <h2 class="problem-title">9. Automated Judge Script</h2>
+                    <div class="problem-desc">Problem: Compare two text inputs. Report the first line that differs, or output "Accepted".</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-9')">Copy</button>
+                        <pre><code class="language-python" id="code-9">n = int(input("Enter number of lines in Correct Output: "))
+correct =[]
+for _ in range(n):
+    correct.append(input())
+    
+m = int(input("Enter number of lines in Team Output: "))
+team =[]
+for _ in range(m):
+    team.append(input())
+
+result = "Accepted"
+max_lines = max(n, m)
+
+for i in range(max_lines):
+    l1 = correct[i].strip() if i < n else ""
+    l2 = team[i].strip() if i < m else ""
+    
+    if l1 != l2:
+        result = f"Differing line: {i+1}"
+        break
+        
+print("Result:", result)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 10 -->
+                <section id="prob-10" class="problem-card">
+                    <h2 class="problem-title">10. Wertyu</h2>
+                    <div class="problem-desc">Problem: Typist shifted one key RIGHT on keyboard. Decode by shifting each character one key LEFT.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-10')">Copy</button>
+                        <pre><code class="language-python" id="code-10">keyboard =['`','1','2','3','4','5','6','7','8','9','0','-','=',
+            'Q','W','E','R','T','Y','U','I','O','P','[',']','\\',
+            'A','S','D','F','G','H','J','K','L',';','\'',
+            'Z','X','C','V','B','N','M',',','.','/']
+            
+text = input("Enter the typed text: ").upper()
+result = ""
+
+for ch in text:
+    if ch == " ":
+        result += " "
+    else:
+        for i in range(len(keyboard)):
+            if keyboard[i] == ch:
+                result += keyboard[i - 1]
+                break
+                
+print("Corrected text:", result)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 11 -->
+                <section id="prob-11" class="problem-card">
+                    <h2 class="problem-title">11. Special String Again</h2>
+                    <div class="problem-desc">Problem: Count "special" substrings. Substrings where all characters are same, or only middle differs.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-11')">Copy</button>
+                        <pre><code class="language-python" id="code-11">n = int(input("Enter length of string: "))
+s = input("Enter the string: ")
+count = 0
+
+for i in range(n):
+    count += 1 # Single character is always special
+    for j in range(i + 1, n):
+        sub = s[i : j + 1]
+        
+        # Check if all characters are same
+        if sub.count(sub[0]) == len(sub):
+            count += 1
+        # Check if edges same and middle characters all same
+        elif sub[0] == sub[-1] and len(sub) > 2:
+            middle = sub[1 : -1]
+            if middle.count(middle[0]) == len(middle) and middle[0] != sub[0]:
+                count += 1
+                
+print("Total special substrings:", count)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 12 -->
+                <section id="prob-12" class="problem-card">
+                    <h2 class="problem-title">12. Pangrams</h2>
+                    <div class="problem-desc">Problem: Check if input string is a pangram (contains every letter a-z).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-12')">Copy</button>
+                        <pre><code class="language-python" id="code-12">print("Enter String:")
+s = input().lower()
+letters = set()
+
+for ch in s:
+    if ch.isalpha():
+        letters.add(ch)
+        
+if len(letters) == 26:
+    print("pangram")
+else:
+    print("not pangram")</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 13 -->
+                <section id="prob-13" class="problem-card">
+                    <h2 class="problem-title">13. Shoemaker's Problem</h2>
+                    <div class="problem-desc">Problem: Order N jobs to minimize total fine by sorting by fine/day ratio.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-13')">Copy</button>
+                        <pre><code class="language-python" id="code-13">n = int(input("Enter number of jobs: ")) 
+order =[] 
+
+for i in range(n): 
+    day = int(input(f"Enter days for job {i+1}: ")) 
+    fine = int(input(f"Enter fine for job {i+1}: ")) 
+    pri = fine / day 
+    order.append([i + 1, pri])
+    
+for i in range(n): 
+    for j in range(i + 1, n): 
+        if order[i][1] < order[j][1]: 
+            # Swap
+            order[i], order[j] = order[j], order[i]   
+            
+print("\nOptimal Job Order:") 
+for i in order: 
+    print(i[0], end=" ")
+print()</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 14 -->
+                <section id="prob-14" class="problem-card">
+                    <h2 class="problem-title">14. Longest Nap</h2>
+                    <div class="problem-desc">Problem: Given appointments, find the longest free gap between 10:00 and 18:00.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-14')">Copy</button>
+                        <pre><code class="language-python" id="code-14">n = int(input("Enter number of appointments: "))
+appointments =[]
+
+for i in range(n):
+    start, end = input(f"Enter Start and End for appt {i+1} (HH:MM HH:MM): ").split()
+    sh, sm = map(int, start.split(':'))
+    eh, em = map(int, end.split(':'))
+    appointments.append([sh * 60 + sm, eh * 60 + em])
+
+appointments.sort()
+current_time = 10 * 60  # 10:00 AM in minutes
+day_end = 18 * 60       # 6:00 PM in minutes
+
+best_gap = 0
+best_start = current_time
+
+for start, end in appointments:
+    if start > current_time:
+        gap = start - current_time
+        if gap > best_gap:
+            best_gap = gap
+            best_start = current_time
+    current_time = max(current_time, end)
+
+if day_end > current_time:
+    gap = day_end - current_time
+    if gap > best_gap:
+        best_gap = gap
+        best_start = current_time
+
+h = best_start // 60
+m = best_start % 60
+print(f"Longest nap starts at {h}:{m:02d} and lasts for {best_gap} minutes.")</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 15 -->
+                <section id="prob-15" class="problem-card">
+                    <h2 class="problem-title">15. Fraudulent Activity Notifications</h2>
+                    <div class="problem-desc">Problem: Send notification if today's spend >= 2 * median of past d days. Simplest approach for beginners.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-15')">Copy</button>
+                        <pre><code class="language-python" id="code-15">n, d = map(int, input("Enter total days and trailing days (n d): ").split())
+exp = list(map(int, input("Enter expenditures separated by space: ").split()))
+
+notifications = 0
+
+for i in range(d, n):
+    past_days = exp[i - d : i]
+    past_days.sort()
+    
+    if d % 2 == 1:
+        median = past_days[d // 2]
+    else:
+        median = (past_days[d // 2 - 1] + past_days[d // 2]) / 2
+        
+    if exp[i] >= 2 * median:
+        notifications += 1
+
+print("Total notifications sent:", notifications)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 16 -->
+                <section id="prob-16" class="problem-card">
+                    <h2 class="problem-title">16. Find the Median</h2>
+                    <div class="problem-desc">Problem: Find median of n integers (n is always odd in this problem). Uses built-in sort.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-16')">Copy</button>
+                        <pre><code class="language-python" id="code-16">n = int(input("Enter total numbers (must be odd): "))
+arr = list(map(int, input("Enter the numbers separated by space: ").split()))
+
+arr.sort()
+median = arr[n // 2]
+
+print("The median is:", median)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 17 -->
+                <section id="prob-17" class="problem-card">
+                    <h2 class="problem-title">17. A Multiplication Game</h2>
+                    <div class="problem-desc">Problem: Stan and Ollie multiply alternately. First to reach >= target wins.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-17')">Copy</button>
+                        <pre><code class="language-python" id="code-17">target = int(input("Enter target number: "))
+multi = 1
+turn = 1   # 1 = Stan, 2 = Ollie
+
+while multi < target:
+    if turn == 1:
+        multi = multi * 9
+        turn = 2
+    else:
+        multi = multi * 2
+        turn = 1
+
+if turn == 2:
+    print("Stan wins")
+else:
+    print("Ollie wins")</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 18 -->
+                <section id="prob-18" class="problem-card">
+                    <h2 class="problem-title">18. Reverse and Add</h2>
+                    <div class="problem-desc">Problem: Reverse a number, add to itself. Repeat until palindrome.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-18')">Copy</button>
+                        <pre><code class="language-python" id="code-18">n = int(input("Enter a number: ")) 
+iterations = 0 
+max_iterations = 1000 
+
+while True: 
+    rev = int(str(n)[::-1]) 
+    n = n + rev 
+    iterations += 1 
+    
+    if str(n) == str(n)[::-1]: 
+        print("Palindrome found:", n) 
+        print("Iterations taken:", iterations) 
+        break 
+        
+    if iterations > max_iterations: 
+        print("No palindrome found within limit.") 
+        break</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 19 -->
+                <section id="prob-19" class="problem-card">
+                    <h2 class="problem-title">19. Maximum Draws</h2>
+                    <div class="problem-desc">Problem: How many draws to guarantee at least one matching pair? Answer: n + 1 (Pigeonhole principle).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-19')">Copy</button>
+                        <pre><code class="language-python" id="code-19">t = int(input("Enter number of test cases: "))
+for _ in range(t):
+    n = int(input("Enter number of pairs of colors: "))
+    print("Maximum draws required to match a pair:", n + 1)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 20 -->
+                <section id="prob-20" class="problem-card">
+                    <h2 class="problem-title">20. Combo Meal</h2>
+                    <div class="problem-desc">Problem: Find minimum cost to buy burgers, fries, and drinks using combo discounts.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-20')">Copy</button>
+                        <pre><code class="language-python" id="code-20">prices = input("Enter price of Burger, Fries, Drink, and Combo: ").split()
+pb, pf, pd, pc = map(int, prices)
+
+b = int(input("Enter number of Burgers needed: "))
+f = int(input("Enter number of Fries needed: "))
+d = int(input("Enter number of Drinks needed: "))
+
+min_cost = float('inf')
+
+for combos in range(min(b, f, d) + 1):
+    cost = combos * pc
+    cost += (b - combos) * pb
+    cost += (f - combos) * pf
+    cost += (d - combos) * pd
+    
+    if cost < min_cost:
+        min_cost = cost
+        
+print("Minimum total cost:", min_cost)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 21 -->
+                <section id="prob-21" class="problem-card">
+                    <h2 class="problem-title">21. Steps</h2>
+                    <div class="problem-desc">Problem: Find minimum steps to cover distance between x and y. Move sizes increment gradually.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-21')">Copy</button>
+                        <pre><code class="language-python" id="code-21">t = int(input("Enter number of test cases: "))
+for i in range(t):
+    x, y = map(int, input("Enter x and y: ").split())
+    d = y - x   # Distance
+    step = 0    # Number of steps
+    move = 0    # Current move length
+    total = 0   # Total distance covered
+    
+    while total < d:
+        step = step + 1
+        if step % 2 == 1:
+            move = move + 1
+        total = total + move
+        
+    print("Minimum steps required:", step)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 22 -->
+                <section id="prob-22" class="problem-card">
+                    <h2 class="problem-title">22. The Priest Mathematician</h2>
+                    <div class="problem-desc">Problem: Tower of Hanoi with n disks. Minimum moves = 2^n - 1.</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-22')">Copy</button>
+                        <pre><code class="language-python" id="code-22">n = int(input("Enter number of disks: "))
+moves = (2 ** n) - 1
+print("Minimum moves to transfer all disks:", moves)</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 23 -->
+                <section id="prob-23" class="problem-card">
+                    <h2 class="problem-title">23. Manasa and Combinatorics</h2>
+                    <div class="problem-desc">Problem: Compute C(n, r) mod (10^9 + 7).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-23')">Copy</button>
+                        <pre><code class="language-python" id="code-23">MOD = 10**9 + 7
+
+# Function to calculate factorial
+def factorial(n):
+    fact = 1
+    for i in range(1, n + 1):
+        fact = (fact * i) % MOD
+    return fact
+
+# Function to calculate nCr
+def nCr(n, r):
+    if r > n:
+        return 0
+    numerator = factorial(n)
+    denominator = (factorial(r) * factorial(n - r)) % MOD
+    result = (numerator * pow(denominator, MOD - 2, MOD)) % MOD
+    return result
+
+# Input
+n = int(input("Enter n: "))
+r = int(input("Enter r: "))
+# Output
+print("nCr =", nCr(n, r))</code></pre>
+                    </div>
+                </section>
+
+                <!-- Problem 24 -->
+                <section id="prob-24" class="problem-card">
+                    <h2 class="problem-title">24. Building a List</h2>
+                    <div class="problem-desc">Problem: Perform left/right operations on a list: append, appendleft, pop, popleft, reverse, print. (No deque library).</div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this, 'code-24')">Copy</button>
+                        <pre><code class="language-python" id="code-24">n = int(input("Enter number of operations: "))
+arr =[]
+
+print("Enter operations (e.g., 'append 5', 'popleft', 'print'):")
+for _ in range(n):
+    op = input().split()
+    
+    if op[0] == 'append':
+        arr.append(int(op[1]))
+    elif op[0] == 'appendleft':
+        arr.insert(0, int(op[1]))
+    elif op[0] == 'pop':
+        if arr:
+            print("Popped:", arr.pop())
+    elif op[0] == 'popleft':
+        if arr:
+            print("Popped Left:", arr.pop(0))
+    elif op[0] == 'reverse':
+        arr.reverse()
+    elif op[0] == 'print':
+        print("Current List:", arr)</code></pre>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Prism.js Syntax Highlighting Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+    <!-- UI Interactions Script -->
+    <script>
+        // Copy to Clipboard Function
+        function copyCode(button, targetId) {
+            const codeElement = document.getElementById(targetId);
+            const codeText = codeElement.textContent;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert("Failed to copy code to clipboard.");
+            });
+        }
+
+        // Dark Mode Toggle Logic
+        const toggleSwitch = document.getElementById('checkbox');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.body.classList.add(currentTheme);
+            if (currentTheme === 'dark-mode') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        toggleSwitch.addEventListener('change', function(e) {
+            if (e.target.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }    
+        });
+    </script>
+</body>
+</html>
